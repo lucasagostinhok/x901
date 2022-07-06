@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://sounds/explosao.wav" type="AudioStream" id=1]
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Node2D
+
+
+
+func _ready():
+	$particles.emitting = true
+	$sparks.emitting = true
+
+
+func _process(delta):
+	if not $particles.emitting and not $sparks.emitting:
+		queue_free()
+"
+
+[sub_resource type="CanvasItemMaterial" id=7]
+blend_mode = 1
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.0496894, 0.0559006, 0.428571, 0.757764, 0.900621, 0.987578 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0.830824, 0.452446, 0.452446, 1, 0.767578, 0.407776, 0.407776, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+max_value = 100.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 50.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 63.14
+damping_curve = SubResource( 4 )
+scale = 10.81
+scale_random = 1.0
+color_ramp = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=8]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 187.25
+initial_velocity_random = 0.8
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color = Color( 0.905882, 0.698039, 0, 1 )
+
+[node name="explosão" type="Node2D"]
+script = SubResource( 6 )
+
+[node name="particles" type="Particles2D" parent="."]
+material = SubResource( 7 )
+emitting = false
+amount = 50
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource( 5 )
+
+[node name="sparks" type="Particles2D" parent="."]
+emitting = false
+amount = 50
+one_shot = true
+explosiveness = 0.87
+process_material = SubResource( 8 )
+
+[node name="explosao" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
+volume_db = -8.74
+autoplay = true
